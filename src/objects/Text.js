@@ -1,11 +1,11 @@
-import React from 'react';
-import Icon from '../Icon';
+import React from "react";
+import Icon from "../Icon";
 
-import Vector from './Vector';
+import Vector from "./Vector";
 
 export default class Text extends Vector {
   static meta = {
-    icon: <Icon icon={'text'} size={30} />,
+    icon: <Icon icon={"text"} size={30} />,
     initial: {
       text: "Hello",
       rotate: 0,
@@ -13,9 +13,10 @@ export default class Text extends Vector {
       fontStyle: "normal",
       textDecoration: "none",
       fill: "black",
+      fillOpacity: 1,
       fontSize: 50,
-      fontFamily: "Helvetica"
-    }
+      fontFamily: "Helvetica",
+    },
   };
 
   getStyle() {
@@ -27,24 +28,26 @@ export default class Text extends Vector {
       fontStyle: object.fontStyle,
       textDecoration: object.textDecoration,
       mixBlendMode: object.blendMode,
-      WebkitUserSelect: "none"
+      WebkitUserSelect: "none",
     };
   }
 
-  getTransformMatrix({rotate, x, y}) {
+  getTransformMatrix({ rotate, x, y }) {
     return `rotate(${rotate} ${x} ${y})`;
   }
 
   render() {
     let object = this.props.object;
     return (
-      <text style={this.getStyle()}
-         {...this.getObjectAttributes()}
-         textAnchor="middle"
-         fontSize={object.fontSize}
-         fontFamily={object.fontFamily}>
+      <text
+        style={this.getStyle()}
+        {...this.getObjectAttributes()}
+        textAnchor="middle"
+        fontSize={object.fontSize}
+        fontFamily={object.fontFamily}
+      >
         {object.text}
-       </text>
+      </text>
     );
   }
 }

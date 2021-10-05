@@ -1,60 +1,13 @@
-import React, {Component} from 'react';
-import { ChromePicker } from 'react-color';
+import React from "react";
 
-import styles from './styles';
-
-class ColorInput extends Component {
-  state = {
-    show: false
-  };
-
-  toggleVisibility = (event) => {
-    if (event.preventDefault) {
-      event.preventDefault();
-    }
-
-    let {show} = this.state;
-    this.setState({
-      show: !show
-    })
-  }
-
-  handleChange = (color) => {
-    let {r, g, b, a} = color.rgb;
-    this.props.onChange(`rgba(${r}, ${g}, ${b}, ${a})`);
-  }
-
-  handleClose = (event) => {
-    if (event.preventDefault) {
-      event.preventDefault();
-    }
-
-    this.setState({
-      show: false
-    })
-  }
-
-  render() {
-    let {show} = this.state;
-    let {value} = this.props;
-
-    return (
-      <div>
-        <a href="#"
-         style={styles.colorInput}
-         onClick={this.toggleVisibility.bind(this)}>
-          <span className="colorinput" style={{...styles.color, backgroundColor: value}} />
-         </a>
-         {show && <div style={styles.colorPopover}>
-           <div style={styles.colorCover} onClick={this.handleClose} />
-           <ChromePicker
-             color={value}
-             onChange={this.handleChange}
-             />
-         </div>}
-      </div>
-    );
-  }
-}
+const ColorInput = ({ value, onChange }) => {
+  return (
+    <input
+      type="color"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+    />
+  );
+};
 
 export default ColorInput;
