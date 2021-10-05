@@ -600,6 +600,9 @@ class Designer extends Component {
               />
             )}
 
+            <div style={{ fontSize: 12 }}>
+              {this.props.width}*{this.props.height}
+            </div>
             {this.renderSVG()}
           </div>
           <div style={{ minWidth: 250 }}>
