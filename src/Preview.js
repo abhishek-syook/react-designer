@@ -8,7 +8,7 @@ class Preview extends Component {
   static defaultProps = {
     objectTypes: {
       text: Text,
-      rectangle: Rect,
+      rect: Rect,
       circle: Circle,
       polygon: Path,
     },

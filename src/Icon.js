@@ -98,7 +98,7 @@ export default class Icon extends Component {
             ></path>
           </g>
         );
-      case "rectangle":
+      case "rect":
         return <rect width={14} height={14} x={4} y={5} rx={3} ry={3} />;
       case "circle":
         return <circle r={8} cx={11} cy={12} />;

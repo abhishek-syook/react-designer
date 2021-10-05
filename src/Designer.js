@@ -16,7 +16,7 @@ class Designer extends Component {
   static defaultProps = {
     objectTypes: {
       text: Text,
-      rectangle: Rect,
+      rect: Rect,
       ellipse: Ellipse,
       polygon: Path,
     },
