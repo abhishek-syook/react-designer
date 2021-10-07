@@ -3,7 +3,7 @@ import Radium from "radium";
 
 import styles from "./styles";
 
-const Column = ({ showIf = true, readOnly = false, ...props }) => {
+const Column = ({ showIf = true, readOnly = false, helperStyle, ...props }) => {
   if (!showIf) {
     return <div style={styles.empty} />;
   }
@@ -25,7 +25,7 @@ const Column = ({ showIf = true, readOnly = false, ...props }) => {
         />
       )}
       {props.label && (
-        <div className="helpertext" style={styles.inputHelper}>
+        <div className="helpertext" style={[styles.inputHelper, helperStyle]}>
           {props.label}
         </div>
       )}

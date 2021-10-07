@@ -4,7 +4,7 @@ export default {
   },
   panelHeader: {
     display: "flex",
-    aliginItems: "center",
+    alignItems: "center",
     marginBottom: 5,
     minHeight: 24,
   },
@@ -47,7 +47,7 @@ export default {
     overflow: "hidden",
     marginTop: 10,
     display: "flex",
-    aliginItems: "center",
+    alignItems: "self-start",
   },
   column: {
     marginRight: 5,
@@ -60,23 +60,25 @@ export default {
     borderRadius: 3,
   },
   select: {
-    WebkitAppearance: "none",
-    MozAppearance: "none",
-    borderWidth: 0,
     padding: "3px 3px 3px 5px",
-    outline: "none",
-    borderRadius: 0,
-    borderRight: "3px solid #b7b7b7",
-    color: "gray",
-    width: 75,
+    maxWidth: 130,
   },
   integerInput: {
-    width: 50,
-    outline: "none",
+    width: 60,
+  },
+  gatewayInput: {
+    width: 120,
+    padding: "3px 5px",
+  },
+  coordinateInput: {
+    width: 40,
+    padding: "3px 5px",
+  },
+  coordsHelper: {
+    paddingLeft: 0,
   },
   textInput: {
     marginTop: 2,
-    outline: "none",
     width: "100%",
     padding: 3,
   },
@@ -92,9 +94,19 @@ export default {
     display: "none",
   },
   button: {
+    display: "block",
+    cursor: "pointer",
+  },
+  arrangeButton: {
     color: "#515151",
     textDecoration: "none",
     display: "block",
     padding: "2px 0",
+  },
+  fabButton: {
+    borderRadius: "50%",
+    padding: "2px 5px",
+    border: 0,
+    marginRight: 5,
   },
 };

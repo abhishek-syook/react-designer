@@ -8,6 +8,8 @@ import PropertyGroup from "./PropertyGroup";
 import Columns from "./Columns";
 import Column from "./Column";
 import ColorInput from "./ColorInput";
+import { TYPES } from "../constants";
+import Select from "../widgets/Select";
 
 export default class StylePanel extends Panel {
   modes = [
@@ -31,6 +33,11 @@ export default class StylePanel extends Panel {
 
   render() {
     let { object } = this.props;
+
+    if (object.elementType === TYPES.GATEWAY) {
+      return null;
+    }
+
     return (
       <PropertyGroup>
         <Columns label="Fill">
@@ -76,17 +83,12 @@ export default class StylePanel extends Panel {
         </Columns>
         <Columns label="Blending">
           <Column>
-            <select
-              style={styles.select}
+            <Select
+              name="Blending"
               value={object.blendMode}
+              options={this.modes}
               onChange={(e) => this.props.onChange("blendMode", e.target.value)}
-            >
-              {this.modes.map((mode) => (
-                <option key={mode} value={mode}>
-                  {mode}
-                </option>
-              ))}
-            </select>
+            />
           </Column>
         </Columns>
       </PropertyGroup>

@@ -8,7 +8,7 @@ import SVGRenderer from "./SVGRenderer";
 import Handler from "./Handler";
 import { modes } from "./constants";
 import * as actions from "./actions";
-import { Text, Path, Rect, Ellipse } from "./objects";
+import { Text, Path, Rect, Ellipse, Gateway } from "./objects";
 import PanelList from "./panels/PanelList";
 import ObjectList from "./panels/ObjectList";
 
@@ -19,6 +19,7 @@ class Designer extends Component {
       rect: Rect,
       ellipse: Ellipse,
       polygon: Path,
+      gateway: Gateway,
     },
     snapToGrid: 1,
     svgStyle: {},
@@ -351,18 +352,17 @@ class Designer extends Component {
   }
 
   showEditor() {
-    let { selectedObjectIndex } = this.state;
-
-    let { objects } = this.props;
-    let currentObject = objects[selectedObjectIndex];
-    let objectComponent = this.getObjectComponent(currentObject.elementType);
-
-    if (objectComponent.meta.editor) {
-      this.setState({
-        mode: modes.EDIT_OBJECT,
-        showHandler: false,
-      });
-    }
+    // TODO: disable polygon editor
+    // let { selectedObjectIndex } = this.state;
+    // let { objects } = this.props;
+    // let currentObject = objects[selectedObjectIndex];
+    // let objectComponent = this.getObjectComponent(currentObject.elementType);
+    // if (objectComponent.meta.editor) {
+    //   this.setState({
+    //     mode: modes.EDIT_OBJECT,
+    //     showHandler: false,
+    //   });
+    // }
   }
 
   getObjectComponent(type) {
@@ -615,6 +615,7 @@ class Designer extends Component {
                 onDelete={this.removeCurrent.bind(this)}
                 objectComponent={objectComponent}
                 onObjectSelect={this.updateSelectedObjectIndex.bind(this)}
+                objects={this.props.objects}
               />
             ) : (
               <ObjectList
@@ -622,6 +623,7 @@ class Designer extends Component {
                 onObjectSelect={this.updateSelectedObjectIndex.bind(this)}
                 clusterList={this.props.clusterList}
                 onChange={this.updateObject.bind(this)}
+                onAddClusterClick={this.props.onAddClusterClick}
               />
             )}
           </div>

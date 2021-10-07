@@ -3,9 +3,9 @@ import React from "react";
 import Icon from "../Icon";
 import Panel from "./Panel";
 import PropertyGroup from "./PropertyGroup";
-import Button from "./Button";
 import Columns from "./Columns";
 import Column from "./Column";
+import Button from "../widgets/Button";
 
 export default class ArrangePanel extends Panel {
   render() {

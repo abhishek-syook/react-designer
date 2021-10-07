@@ -1,9 +1,21 @@
 import { Component } from "react";
 
-import { SizePanel, TextPanel, StylePanel, ArrangePanel } from "../panels";
+import {
+  SizePanel,
+  TextPanel,
+  StylePanel,
+  ArrangePanel,
+  GatewayPanel,
+} from "../panels";
 
 export default class Vector extends Component {
-  static panels = [SizePanel, TextPanel, StylePanel, ArrangePanel];
+  static panels = [
+    SizePanel,
+    TextPanel,
+    StylePanel,
+    GatewayPanel,
+    ArrangePanel,
+  ];
 
   getStyle() {
     let { object } = this.props;

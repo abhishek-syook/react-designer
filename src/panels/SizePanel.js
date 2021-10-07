@@ -6,6 +6,7 @@ import Panel from "./Panel";
 import PropertyGroup from "./PropertyGroup";
 import Columns from "./Columns";
 import Column from "./Column";
+import Button from "../widgets/Button";
 
 export default class SizePanel extends Panel {
   onLabelPosChange(key, value) {
@@ -75,7 +76,7 @@ export default class SizePanel extends Panel {
             onChange={this.props.onChange.bind(this, "y")}
           />
         </Columns>
-        {has(object, "rotate") && (
+        {/* {has(object, "rotate") && (
           <Columns label="Rotation">
             <Column
               label="angle"
@@ -84,7 +85,7 @@ export default class SizePanel extends Panel {
               onChange={this.props.onChange.bind(this, "rotate")}
             />
           </Columns>
-        )}
+        )} */}
         <Columns label="Shape">
           <p style={{ margin: 0, textTransform: "capitalize" }}>
             {object.elementType}
@@ -96,7 +97,7 @@ export default class SizePanel extends Panel {
           </p>
         </Columns>
         <Columns label="Delete">
-          <button onClick={this.props.onDelete}>Delete Shape</button>
+          <Button onClick={this.props.onDelete}>Delete Shape</Button>
         </Columns>
       </PropertyGroup>
     );

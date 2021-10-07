@@ -1,16 +1,29 @@
 import React, { Component } from "react";
 import Radium from "radium";
+import { TYPES } from "../constants";
+import { SHAPES } from "../constants";
 
 class InsertMenu extends Component {
+  getKeys(type, tools) {
+    switch (type) {
+      case TYPES.MAP:
+        return Object.keys(tools).filter((i) => i !== SHAPES.gateway);
+      case TYPES.TRACK:
+        return Object.keys(tools).filter((i) => i === SHAPES.polygon);
+      case TYPES.GATEWAY:
+        return Object.keys(tools).filter((i) => i === SHAPES.gateway);
+      default:
+        return [];
+    }
+  }
+
   render() {
     let { currentTool, tools, onSelect, type, onTypeChange } = this.props;
-
-    let keys = Object.keys(tools);
 
     return (
       <div style={styles.insertMenu}>
         <div style={{ display: "flex" }}>
-          {["map", "track"].map((key) => (
+          {Object.values(TYPES).map((key) => (
             <div
               key={key}
               style={[
@@ -28,7 +41,7 @@ class InsertMenu extends Component {
         </div>
         <h4>Drawing</h4>
         <ul style={styles.toolBox}>
-          {keys.map((elementType, i) => (
+          {this.getKeys(type, tools).map((elementType, i) => (
             <li
               className={
                 currentTool === elementType
