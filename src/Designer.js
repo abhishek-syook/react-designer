@@ -1,27 +1,29 @@
-import React, { Component } from 'react';
-import _ from 'lodash';
-import {HotKeys} from 'react-hotkeys';
-import Radium from 'radium';
-
-import InsertMenu from './panels/InsertMenu';
-import SVGRenderer from './SVGRenderer';
-import Handler from './Handler';
-import {modes} from './constants';
-import * as actions from './actions';
-import {Text, Path, Rect, Circle} from './objects';
-import PanelList from './panels/PanelList';
+import React, { Component } from "react";
+import _ from "lodash";
+import { HotKeys } from "react-hotkeys";
+import Radium from "radium";
+import "./index.css";
+import InsertMenu from "./panels/InsertMenu";
+import SVGRenderer from "./SVGRenderer";
+import Handler from "./Handler";
+import { modes } from "./constants";
+import * as actions from "./actions";
+import { Text, Path, Rect, Ellipse, Gateway } from "./objects";
+import PanelList from "./panels/PanelList";
+import ObjectList from "./panels/ObjectList";
 
 class Designer extends Component {
   static defaultProps = {
     objectTypes: {
-      'text': Text,
-      'rectangle': Rect,
-      'circle': Circle,
-      'polygon': Path
+      text: Text,
+      rect: Rect,
+      ellipse: Ellipse,
+      polygon: Path,
+      gateway: Gateway,
     },
     snapToGrid: 1,
     svgStyle: {},
-    insertMenu: InsertMenu
+    insertMenu: InsertMenu,
   };
 
   state = {
@@ -31,20 +33,21 @@ class Designer extends Component {
       left: 200,
       width: 50,
       height: 50,
-      rotate: 0
+      rotate: 0,
     },
     currentObjectIndex: null,
     selectedObjectIndex: null,
-    selectedTool: null
+    selectedTool: null,
+    type: "map",
   };
 
   keyMap = {
-    'removeObject': ['del', 'backspace'],
-    'moveLeft': ['left', 'shift+left'],
-    'moveRight': ['right', 'shift+right'],
-    'moveUp': ['up', 'shift+up'],
-    'moveDown': ['down', 'shift+down'],
-    'closePath': ['enter']
+    moveUp: ["up", "shift+up"],
+    moveDown: ["down", "shift+down"],
+    moveLeft: ["left", "shift+left"],
+    moveRight: ["right", "shift+right"],
+    closePath: ["enter"],
+    removeObject: ["del", "backspace"],
   };
 
   componentWillMount() {
@@ -52,8 +55,8 @@ class Designer extends Component {
   }
 
   showHandler(index) {
-    let {mode} = this.state;
-    let {objects} = this.props;
+    let { mode } = this.state;
+    let { objects } = this.props;
     let object = objects[index];
 
     if (mode !== modes.FREE) {
@@ -63,22 +66,22 @@ class Designer extends Component {
     this.updateHandler(index, object);
     this.setState({
       currentObjectIndex: index,
-      showHandler: true
+      showHandler: true,
     });
   }
 
   hideHandler() {
-    let {mode} = this.state;
+    let { mode } = this.state;
     if (mode === modes.FREE) {
       this.setState({
-        showHandler: false
+        showHandler: false,
       });
     }
   }
 
   getStartPointBundle(event, object) {
-    let {currentObjectIndex} = this.state;
-    let {objects} = this.props;
+    let { currentObjectIndex } = this.state;
+    let { objects } = this.props;
     let mouse = this.getMouseCoords(event);
     object = object || objects[currentObjectIndex];
     return {
@@ -88,27 +91,27 @@ class Designer extends Component {
       objectY: object.y,
       width: object.width,
       height: object.height,
-      rotate: object.rotate
+      rotate: object.rotate,
     };
   }
 
   startDrag(mode, event) {
-    let {currentObjectIndex} = this.state;
+    let { currentObjectIndex } = this.state;
     this.setState({
       mode: mode,
       startPoint: this.getStartPointBundle(event),
-      selectedObjectIndex: currentObjectIndex
+      selectedObjectIndex: currentObjectIndex,
     });
   }
 
   resetSelection() {
     this.setState({
-      selectedObjectIndex: null
+      selectedObjectIndex: null,
     });
   }
 
   newObject(event) {
-    let {mode, selectedTool} = this.state;
+    let { mode, selectedTool, type } = this.state;
 
     this.resetSelection(event);
 
@@ -116,15 +119,16 @@ class Designer extends Component {
       return;
     }
 
-    let {meta} = this.getObjectComponent(selectedTool);
+    let { meta } = this.getObjectComponent(selectedTool);
     let mouse = this.getMouseCoords(event);
 
-    let {objects, onUpdate} = this.props;
+    let { objects, onUpdate } = this.props;
     let object = {
       ...meta.initial,
-      type: selectedTool,
+      elementType: selectedTool,
       x: mouse.x,
-      y: mouse.y
+      y: mouse.y,
+      type,
     };
 
     onUpdate([...objects, object]);
@@ -134,58 +138,64 @@ class Designer extends Component {
       selectedObjectIndex: objects.length,
       startPoint: this.getStartPointBundle(event, object),
       mode: meta.editor ? modes.EDIT_OBJECT : modes.SCALE,
-      selectedTool: null
+      selectedTool: null,
     });
-
   }
 
   updatePath(object) {
-    let {path} = object;
+    let { path } = object;
     let diffX = object.x - object.moveX;
     let diffY = object.y - object.moveY;
 
-    let newPath = path.map(({x1, y1, x2, y2, x, y}) => ({
-      x1: diffX + x1,
-      y1: diffY + y1,
-      x2: diffX + x2,
-      y2: diffY + y2,
-      x: diffX + x,
-      y: diffY + y
-    }));
+    let newPath = path.map(({ x1, y1, x2, y2, x, y }) => {
+      x1 = x1 || x;
+      x2 = x2 || x;
+      y1 = y1 || y;
+      y2 = y2 || y;
+
+      return {
+        x1: diffX + x1,
+        y1: diffY + y1,
+        x2: diffX + x2,
+        y2: diffY + y2,
+        x: diffX + x,
+        y: diffY + y,
+      };
+    });
 
     return {
       ...object,
       path: newPath,
       moveX: object.x,
-      moveY: object.y
+      moveY: object.y,
     };
   }
 
   updateObject(objectIndex, changes, updatePath) {
-    let {objects, onUpdate} = this.props;
-    onUpdate(objects.map((object, index) => {
-      if (index === objectIndex) {
-        let newObject = {
-          ...object,
-          ...changes
-        };
-        return updatePath
-                ? this.updatePath(newObject)
-                : newObject;
-      } else {
-        return object;
-      }
-    }));
+    let { objects, onUpdate } = this.props;
+    onUpdate(
+      objects.map((object, index) => {
+        if (index === objectIndex) {
+          let newObject = {
+            ...object,
+            ...changes,
+          };
+          return updatePath ? this.updatePath(newObject) : newObject;
+        } else {
+          return object;
+        }
+      })
+    );
   }
 
   getOffset() {
     let parent = this.svgElement.getBoundingClientRect();
-    let {canvasWidth, canvasHeight} = this.getCanvas();
+    let { canvasWidth, canvasHeight } = this.getCanvas();
     return {
       x: parent.left,
       y: parent.top,
       width: canvasWidth,
-      height: canvasHeight
+      height: canvasHeight,
     };
   }
 
@@ -194,14 +204,14 @@ class Designer extends Component {
     return {
       ...bundle,
       x: bundle.x - offset.x,
-      y: bundle.y - offset.y
-    }
+      y: bundle.y - offset.y,
+    };
   }
 
   updateHandler(index, object) {
     let target = this.objectRefs[index];
     let bbox = target.getBoundingClientRect();
-    let {canvasOffsetX, canvasOffsetY} = this.getCanvas();
+    let { canvasOffsetX, canvasOffsetY } = this.getCanvas();
 
     let handler = {
       ...this.state.handler,
@@ -209,7 +219,7 @@ class Designer extends Component {
       height: object.height || bbox.height,
       top: object.y + canvasOffsetY,
       left: object.x + canvasOffsetX,
-      rotate: object.rotate
+      rotate: object.rotate,
     };
 
     if (!object.width) {
@@ -217,44 +227,44 @@ class Designer extends Component {
       handler = {
         ...handler,
         left: bbox.left - offset.x,
-        top: bbox.top - offset.y
+        top: bbox.top - offset.y,
       };
     }
 
     this.setState({
-      handler: handler
+      handler: handler,
     });
   }
 
-  snapCoordinates({x, y}) {
-    let {snapToGrid} = this.props;
+  snapCoordinates({ x, y }) {
+    let { snapToGrid } = this.props;
     return {
       x: x - (x % snapToGrid),
-      y: y - (y % snapToGrid)
+      y: y - (y % snapToGrid),
     };
   }
 
-  getMouseCoords({clientX, clientY}) {
+  getMouseCoords({ clientX, clientY }) {
     let coords = this.applyOffset({
       x: clientX,
-      y: clientY
+      y: clientY,
     });
 
     return this.snapCoordinates(coords);
   }
 
   onDrag(event) {
-    let {currentObjectIndex, startPoint, mode} = this.state;
-    let {objects} = this.props;
+    let { currentObjectIndex, startPoint, mode } = this.state;
+    let { objects } = this.props;
     let object = objects[currentObjectIndex];
     let mouse = this.getMouseCoords(event);
 
-    let {scale, rotate, drag} = actions;
+    let { scale, rotate, drag } = actions;
 
     let map = {
       [modes.SCALE]: scale,
       [modes.ROTATE]: rotate,
-      [modes.DRAG]: drag
+      [modes.DRAG]: drag,
     };
 
     let action = map[mode];
@@ -265,7 +275,7 @@ class Designer extends Component {
         startPoint,
         mouse,
         objectIndex: currentObjectIndex,
-        objectRefs: this.objectRefs
+        objectRefs: this.objectRefs,
       });
 
       this.updateObject(currentObjectIndex, newObject);
@@ -278,113 +288,119 @@ class Designer extends Component {
   }
 
   detectOverlappedObjects(event) {
-    let {currentObjectIndex} = this.state;
+    let { currentObjectIndex } = this.state;
     let mouse = this.getMouseCoords(event);
 
     let refs = this.objectRefs,
-        keys = Object.keys(refs),
-        offset = this.getOffset();
+      keys = Object.keys(refs),
+      offset = this.getOffset();
 
-    let currentRect = (refs[currentObjectIndex]
-                       .getBoundingClientRect());
+    let currentRect = refs[currentObjectIndex].getBoundingClientRect();
 
-    keys.filter(
-      (object, index) => index !== currentObjectIndex
-    ).forEach((key) => {
-      let rect = refs[key].getBoundingClientRect();
-      let {left, top, width, height} = rect;
+    keys
+      .filter((object, index) => index !== currentObjectIndex)
+      .forEach((key) => {
+        let rect = refs[key].getBoundingClientRect();
+        let { left, top, width, height } = rect;
 
-      left -= offset.x;
-      top -= offset.y;
+        left -= offset.x;
+        top -= offset.y;
 
-      let isOverlapped = (
-        mouse.x > left && mouse.x < left + width &&
-        mouse.y > top && mouse.y < top + height &&
-        currentRect.width > width &&
-        currentRect.height > height
-      );
+        let isOverlapped =
+          mouse.x > left &&
+          mouse.x < left + width &&
+          mouse.y > top &&
+          mouse.y < top + height &&
+          currentRect.width > width &&
+          currentRect.height > height;
 
-      if (isOverlapped) {
-        this.showHandler(Number(key));
-      }
-    });
+        if (isOverlapped) {
+          this.showHandler(Number(key));
+        }
+      });
   }
 
   stopDrag() {
-    let {mode, currentObjectIndex} = this.state;
+    let { mode, currentObjectIndex } = this.state;
 
-    // Disables shape drag out of bounds 
-    if(mode === modes.DRAG) {
-      let {objects} = this.props;
+    // Disables shape drag out of bounds
+    if (mode === modes.DRAG) {
+      let { objects } = this.props;
       let object = objects[currentObjectIndex];
       const offset = this.getOffset();
-      if(object.x < 0) { object.x = 0 };
-      if(object.y < 0) { object.y = 0 };
-      if(object.x+object.width > offset.width) { object.x = offset.width - object.width }
-      if(object.y+object.height > offset.height) { object.y = offset.height - object.height }
+      if (object.x < 0) {
+        object.x = 0;
+      }
+      if (object.y < 0) {
+        object.y = 0;
+      }
+      if (object.x + object.width > offset.width) {
+        object.x = offset.width - object.width;
+      }
+      if (object.y + object.height > offset.height) {
+        object.y = offset.height - object.height;
+      }
       this.updateObject(currentObjectIndex, object);
       this.updateHandler(currentObjectIndex, object);
     }
 
-    if (_.includes([modes.DRAG,
-                    modes.ROTATE,
-                    modes.SCALE], mode)) {
+    if (_.includes([modes.DRAG, modes.ROTATE, modes.SCALE], mode)) {
       this.setState({
-        mode: modes.FREE
+        mode: modes.FREE,
       });
     }
   }
 
   showEditor() {
-    let {selectedObjectIndex} = this.state;
-
-    let {objects} = this.props,
-      currentObject = objects[selectedObjectIndex],
-      objectComponent = this.getObjectComponent(currentObject.type);
-
-    if (objectComponent.meta.editor) {
-      this.setState({
-        mode: modes.EDIT_OBJECT,
-        showHandler: false
-      });
-    }
+    // TODO: disable polygon editor
+    // let { selectedObjectIndex } = this.state;
+    // let { objects } = this.props;
+    // let currentObject = objects[selectedObjectIndex];
+    // let objectComponent = this.getObjectComponent(currentObject.elementType);
+    // if (objectComponent.meta.editor) {
+    //   this.setState({
+    //     mode: modes.EDIT_OBJECT,
+    //     showHandler: false,
+    //   });
+    // }
   }
 
   getObjectComponent(type) {
-    let {objectTypes} = this.props;
+    let { objectTypes } = this.props;
     return objectTypes[type];
   }
 
   getCanvas() {
-    let {width, height} = this.props;
-    let {
-      canvasWidth=width,
-      canvasHeight=height
-    } = this.props;
+    let { width, height } = this.props;
+    let { canvasWidth = width, canvasHeight = height } = this.props;
     return {
-      width, height, canvasWidth, canvasHeight,
+      width,
+      height,
+      canvasWidth,
+      canvasHeight,
       canvasOffsetX: (canvasWidth - width) / 2,
-      canvasOffsetY: (canvasHeight - height) / 2
+      canvasOffsetY: (canvasHeight - height) / 2,
     };
   }
 
   renderSVG() {
     let canvas = this.getCanvas();
-    let {background, objects, objectTypes, backgroundImage} = this.props;
+    let { background, objects, objectTypes, backgroundImage } = this.props;
 
     return (
       <SVGRenderer
-         background={background}
-         backgroundImage={backgroundImage}
-         width={canvas.width}
-         canvas={canvas}
-         height={canvas.height}
-         objects={objects}
-         onMouseOver={this.showHandler.bind(this)}
-         objectTypes={objectTypes}
-         objectRefs={this.objectRefs}
-         onRender={(ref) => this.svgElement = ref}
-         onMouseDown={this.newObject.bind(this)} />
+        background={background}
+        backgroundImage={backgroundImage}
+        width={canvas.width}
+        canvas={canvas}
+        height={canvas.height}
+        objects={objects}
+        onMouseOver={this.showHandler.bind(this)}
+        objectTypes={objectTypes}
+        objectRefs={this.objectRefs}
+        onRender={(ref) => (this.svgElement = ref)}
+        onMouseDown={this.newObject.bind(this)}
+      />
     );
   }
 
@@ -394,77 +410,78 @@ class Designer extends Component {
       mode: modes.DRAW,
       currentObjectIndex: null,
       showHandler: false,
-      handler: null
+      handler: null,
     });
   }
 
   handleObjectChange(key, value) {
-    let {selectedObjectIndex} = this.state;
+    let { selectedObjectIndex } = this.state;
     this.updateObject(selectedObjectIndex, {
-      [key]: value
+      [key]: value,
     });
   }
 
   handleArrange(arrange) {
-    let {selectedObjectIndex} = this.state;
-    let {objects} = this.props;
+    let { selectedObjectIndex } = this.state;
+    let { objects } = this.props;
     let object = objects[selectedObjectIndex];
 
     let arrangers = {
-      'front': (rest, object) => ([[...rest, object], rest.length]),
-      'back': (rest, object) => ([[object, ...rest], 0])
+      front: (rest, object) => [[...rest, object], rest.length],
+      back: (rest, object) => [[object, ...rest], 0],
     };
 
-    let rest = objects.filter(
-      (object, index) =>
-        selectedObjectIndex !== index
+    let rest = objects.filter((object, index) => selectedObjectIndex !== index);
+
+    this.setState(
+      {
+        selectedObjectIndex: null,
+      },
+      () => {
+        let arranger = arrangers[arrange];
+        let [arranged, newIndex] = arranger(rest, object);
+        this.props.onUpdate(arranged);
+        this.setState({
+          selectedObjectIndex: newIndex,
+        });
+      }
     );
-
-    this.setState({
-      selectedObjectIndex: null
-    }, () => {
-
-      let arranger = arrangers[arrange];
-      let [arranged, newIndex] = arranger(rest, object);
-      this.props.onUpdate(arranged);
-      this.setState({
-        selectedObjectIndex: newIndex
-      });
-    });
   }
 
   removeCurrent() {
-    let {selectedObjectIndex} = this.state;
-    let {objects} = this.props;
+    let { selectedObjectIndex } = this.state;
+    let { objects } = this.props;
+    const deleteObj = objects[selectedObjectIndex];
 
-    let rest = objects.filter(
-      (object, index) =>
-        selectedObjectIndex !== index
+    let rest = objects.filter((object, index) => selectedObjectIndex !== index);
+
+    this.setState(
+      {
+        currentObjectIndex: null,
+        selectedObjectIndex: null,
+        showHandler: false,
+        handler: null,
+      },
+      () => {
+        this.objectRefs = {};
+        this.props.onUpdate(rest);
+        this.props.onDelete(deleteObj);
+      }
     );
-
-    this.setState({
-      currentObjectIndex: null,
-      selectedObjectIndex: null,
-      showHandler: false,
-      handler: null
-    }, () => {
-      this.objectRefs = {};
-      this.props.onUpdate(rest);
-    });
   }
 
   moveSelectedObject(attr, points, event, key) {
-    let {selectedObjectIndex} = this.state;
-    let {objects} = this.props;
+    let { selectedObjectIndex } = this.state;
+    let { objects } = this.props;
     let object = objects[selectedObjectIndex];
 
-    if (key.startsWith('shift')) {
+    if (key.startsWith("shift")) {
       points *= 10;
     }
 
     let changes = {
       ...object,
-      [attr]: object[attr] + points
+      [attr]: object[attr] + points,
     };
 
     this.updateObject(selectedObjectIndex, changes);
@@ -474,43 +491,55 @@ class Designer extends Component {
   getKeymapHandlers() {
     let handlers = {
       removeObject: this.removeCurrent.bind(this),
-      moveLeft: this.moveSelectedObject.bind(this, 'x', -1),
-      moveRight: this.moveSelectedObject.bind(this, 'x', 1),
-      moveUp: this.moveSelectedObject.bind(this, 'y', -1),
-      moveDown: this.moveSelectedObject.bind(this, 'y', 1),
-      closePath: () => this.setState({mode: modes.FREE})
+      moveLeft: this.moveSelectedObject.bind(this, "x", -1),
+      moveRight: this.moveSelectedObject.bind(this, "x", 1),
+      moveUp: this.moveSelectedObject.bind(this, "y", -1),
+      moveDown: this.moveSelectedObject.bind(this, "y", 1),
+      closePath: () => this.setState({ mode: modes.FREE }),
     };
 
     return _.mapValues(handlers, (handler) => (event, key) => {
-      if (event.target.tagName !== 'INPUT') {
+      if (event.target.tagName !== "INPUT") {
         event.preventDefault();
         handler(event, key);
       }
     });
   }
 
-  render() {
-    let {showHandler, handler, mode,
-         selectedObjectIndex, selectedTool} = this.state;
+  updateSelectedObjectIndex(selectedObjectIndex) {
+    this.setState({
+      selectedObjectIndex,
+    });
+  }
 
+  onTypeChange(type) {
+    this.setState({ type });
+  }
+
+  render() {
     let {
-      objects,
-      objectTypes,
-      insertMenu: InsertMenuComponent
-    } = this.props;
+      showHandler,
+      handler,
+      mode,
+      selectedObjectIndex,
+      selectedTool,
+      type,
+    } = this.state;
+
+    let { objects, objectTypes, insertMenu: InsertMenuComponent } = this.props;
 
     let currentObject = objects[selectedObjectIndex],
-        isEditMode = mode === modes.EDIT_OBJECT,
-        showPropertyPanel = selectedObjectIndex !== null;
+      isEditMode = mode === modes.EDIT_OBJECT,
+      showPropertyPanel = selectedObjectIndex !== null;
 
-    let {width, height, canvasWidth, canvasHeight} = this.getCanvas();
+    let { width, height, canvasWidth, canvasHeight } = this.getCanvas();
 
     let objectComponent, objectWithInitial, ObjectEditor;
     if (currentObject) {
-      objectComponent = this.getObjectComponent(currentObject.type);
+      objectComponent = this.getObjectComponent(currentObject.elementType);
       objectWithInitial = {
         ...objectComponent.meta.initial,
-        ...currentObject
+        ...currentObject,
       };
       ObjectEditor = objectComponent.meta.editor;
     }
@@ -519,55 +548,85 @@ class Designer extends Component {
       <HotKeys
         keyMap={this.keyMap}
         style={styles.keyboardManager}
-        handlers={this.getKeymapHandlers()}>
-        <div className={'container'}
-             style={{
-                ...styles.container,
-                ...this.props.style,
-                width: canvasWidth,
-                height: canvasHeight
-             }}
-             onMouseMove={this.onDrag.bind(this)}
-             onMouseUp={this.stopDrag.bind(this)}>
-
-          {isEditMode && ObjectEditor && (
-             <ObjectEditor object={currentObject}
-                 offset={this.getOffset()}
-                 onUpdate={(object) =>
-                    this.updateObject(selectedObjectIndex, object)}
-                 onClose={() => this.setState({mode: modes.FREE})}
-                 width={width}
-                 height={height} />)}
-
-          {showHandler && (
-            <Handler
-              boundingBox={handler}
-              canResize={_(currentObject).has('width') ||
-                         _(currentObject).has('height')}
-              canRotate={_(currentObject).has('rotate')}
-              onMouseLeave={this.hideHandler.bind(this)}
-              onDoubleClick={this.showEditor.bind(this)}
-              onDrag={this.startDrag.bind(this, modes.DRAG)}
-              onResize={this.startDrag.bind(this, modes.SCALE)}
-              onRotate={this.startDrag.bind(this, modes.ROTATE)} /> )}
-
+        handlers={this.getKeymapHandlers()}
+      >
+        <div className={"root"} style={{ ...styles.root }}>
           {InsertMenuComponent && (
-            <InsertMenuComponent tools={objectTypes}
+            <InsertMenuComponent
+              type={type}
+              tools={objectTypes}
               currentTool={selectedTool}
-              onSelect={this.selectTool.bind(this)} />
+              onSelect={this.selectTool.bind(this)}
+              onTypeChange={(value) => this.onTypeChange(value)}
+            />
           )}
+          <div
+            className={"container"}
+            style={{
+              ...styles.container,
+              ...this.props.style,
+              width: canvasWidth,
+              height: canvasHeight,
+            }}
+            onMouseMove={this.onDrag.bind(this)}
+            onMouseUp={this.stopDrag.bind(this)}
+          >
+            {isEditMode && ObjectEditor && (
+              <ObjectEditor
+                object={currentObject}
+                offset={this.getOffset()}
+                onUpdate={(object) =>
+                  this.updateObject(selectedObjectIndex, object)
+                }
+                onClose={() => this.setState({ mode: modes.FREE })}
+                width={width}
+                height={height}
+              />
+            )}
 
-          {this.renderSVG()}
+            {showHandler && (
+              <Handler
+                boundingBox={handler}
+                canResize={
+                  _(currentObject).has("width") ||
+                  _(currentObject).has("height")
+                }
+                // canRotate={_(currentObject).has("rotate")}
+                onMouseLeave={this.hideHandler.bind(this)}
+                onDoubleClick={this.showEditor.bind(this)}
+                onDrag={this.startDrag.bind(this, modes.DRAG)}
+                onResize={this.startDrag.bind(this, modes.SCALE)}
+                // onRotate={this.startDrag.bind(this, modes.ROTATE)}
+              />
+            )}
 
-          {showPropertyPanel && (
-            <PanelList
-              offset={this.getOffset()}
-              object={objectWithInitial}
-              onArrange={this.handleArrange.bind(this)}
-              onChange={this.handleObjectChange.bind(this)}
-              onDelete={this.removeCurrent.bind(this)}
-              objectComponent={objectComponent} />
-          )}
+            <div style={{ fontSize: 12 }}>
+              {this.props.width}*{this.props.height}
+            </div>
+            {this.renderSVG()}
+          </div>
+          <div style={{ minWidth: 250 }}>
+            {showPropertyPanel ? (
+              <PanelList
+                offset={this.getOffset()}
+                object={objectWithInitial}
+                onArrange={this.handleArrange.bind(this)}
+                onChange={this.handleObjectChange.bind(this)}
+                onDelete={this.removeCurrent.bind(this)}
+                objectComponent={objectComponent}
+                onObjectSelect={this.updateSelectedObjectIndex.bind(this)}
+                objects={this.props.objects}
+              />
+            ) : (
+              <ObjectList
+                objects={this.props.objects}
+                onObjectSelect={this.updateSelectedObjectIndex.bind(this)}
+                clusterList={this.props.clusterList}
+                onChange={this.updateObject.bind(this)}
+                onAddClusterClick={this.props.onAddClusterClick}
+              />
+            )}
+          </div>
         </div>
       </HotKeys>
     );
@@ -575,12 +634,16 @@ class Designer extends Component {
 }
 
 export const styles = {
+  root: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
   container: {
-    position: 'relative'
+    position: "relative",
   },
   keyboardManager: {
-    outline: 'none'
-  }
-}
+    outline: "none",
+  },
+};
 
 export default Radium(Designer);

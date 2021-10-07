@@ -13,5 +13,27 @@ export const modes = {
   ROTATE,
   DRAW,
   TYPE,
-  EDIT_OBJECT
+  EDIT_OBJECT,
 };
+
+export const TYPES = Object.freeze({
+  MAP: "map",
+  TRACK: "track",
+  GATEWAY: "gateway",
+});
+
+export const SHAPES = Object.freeze({
+  arc: "arc",
+  circle: "circle",
+  ellipse: "ellipse",
+  polygon: "polygon",
+  polyline: "polyline",
+  rect: "rect",
+  gateway: "gateway",
+});
+
+export const buildingBlock = Object.freeze({
+  WIFI: "wifi",
+});
+
+export const clusterOptions = ["standalone", "cluster"];
