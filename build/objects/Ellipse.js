@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -8,15 +8,19 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = require('react');
+var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
 
-var _Icon = require('../Icon');
+var _Icon = require("../Icon");
 
 var _Icon2 = _interopRequireDefault(_Icon);
 
-var _Vector2 = require('./Vector');
+var _Label = require("./Label");
+
+var _Label2 = _interopRequireDefault(_Label);
+
+var _Vector2 = require("./Vector");
 
 var _Vector3 = _interopRequireDefault(_Vector2);
 
@@ -28,41 +32,55 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Circle = function (_Vector) {
-  _inherits(Circle, _Vector);
+var Ellipse = function (_Vector) {
+  _inherits(Ellipse, _Vector);
 
-  function Circle() {
-    _classCallCheck(this, Circle);
+  function Ellipse() {
+    _classCallCheck(this, Ellipse);
 
-    return _possibleConstructorReturn(this, (Circle.__proto__ || Object.getPrototypeOf(Circle)).apply(this, arguments));
+    return _possibleConstructorReturn(this, (Ellipse.__proto__ || Object.getPrototypeOf(Ellipse)).apply(this, arguments));
   }
 
-  _createClass(Circle, [{
-    key: 'render',
+  _createClass(Ellipse, [{
+    key: "render",
     value: function render() {
       var object = this.props.object;
-      return _react2.default.createElement('ellipse', _extends({ style: this.getStyle()
-      }, this.getObjectAttributes(), {
-        rx: object.width / 2,
-        ry: object.height / 2,
-        cx: object.x + object.width / 2,
-        cy: object.y + object.height / 2 }));
+      return _react2.default.createElement(
+        _react2.default.Fragment,
+        null,
+        _react2.default.createElement("ellipse", _extends({
+          style: this.getStyle()
+        }, this.getObjectAttributes(), {
+          rx: object.width / 2,
+          ry: object.height / 2,
+          cx: object.x + object.width / 2,
+          cy: object.y + object.height / 2,
+          strokeDasharray: object.type == "map" ? 0 : 4
+        })),
+        _react2.default.createElement(_Label2.default, {
+          x: object.labelCoordinates.x,
+          y: object.labelCoordinates.y,
+          label: object.name
+        })
+      );
     }
   }]);
 
-  return Circle;
+  return Ellipse;
 }(_Vector3.default);
 
-Circle.meta = {
-  icon: _react2.default.createElement(_Icon2.default, { icon: 'circle', size: 30 }),
+Ellipse.meta = {
+  icon: _react2.default.createElement(_Icon2.default, { icon: "circle", size: 30 }),
   initial: {
     width: 5,
     height: 5,
     rotate: 0,
-    fill: "transparent",
+    fill: "#000",
+    fillOpacity: 0.3,
     strokeWidth: 1,
     stroke: "rgba(0,0,0,1)",
-    blendMode: "normal"
+    blendMode: "normal",
+    labelCoordinates: { x: 30, y: 30 }
   }
 };
-exports.default = Circle;
+exports.default = Ellipse;

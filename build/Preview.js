@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -8,19 +8,19 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = require('react');
+var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
 
-var _radium = require('radium');
+var _radium = require("radium");
 
 var _radium2 = _interopRequireDefault(_radium);
 
-var _SVGRenderer = require('./SVGRenderer');
+var _SVGRenderer = require("./SVGRenderer");
 
 var _SVGRenderer2 = _interopRequireDefault(_SVGRenderer);
 
-var _objects = require('./objects');
+var _objects = require("./objects");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -40,12 +40,12 @@ var Preview = function (_Component) {
   }
 
   _createClass(Preview, [{
-    key: 'componentWillMount',
+    key: "componentWillMount",
     value: function componentWillMount() {
       this.objectRefs = {};
     }
   }, {
-    key: 'render',
+    key: "render",
     value: function render() {
       var _props = this.props,
           width = _props.width,
@@ -67,15 +67,16 @@ var Preview = function (_Component) {
       };
 
       return _react2.default.createElement(
-        'div',
-        { className: 'container', style: style },
+        "div",
+        { className: "container", style: style },
         _react2.default.createElement(_SVGRenderer2.default, {
           width: width,
           height: height,
           objects: objects,
           objectRefs: this.objectRefs,
           objectTypes: objectTypes,
-          canvas: canvas })
+          canvas: canvas
+        })
       );
     }
   }]);
@@ -85,10 +86,10 @@ var Preview = function (_Component) {
 
 Preview.defaultProps = {
   objectTypes: {
-    'text': _objects.Text,
-    'rectangle': _objects.Rect,
-    'circle': _objects.Circle,
-    'polygon': _objects.Path
+    text: _objects.Text,
+    rect: _objects.Rect,
+    circle: _objects.Circle,
+    polygon: _objects.Path
   }
 };
 

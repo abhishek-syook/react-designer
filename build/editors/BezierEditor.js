@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -8,11 +8,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = require('react');
+var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
 
-var _radium = require('radium');
+var _radium = require("radium");
 
 var _radium2 = _interopRequireDefault(_radium);
 
@@ -43,12 +43,12 @@ var BezierEditor = function (_Component) {
     }
 
     return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = BezierEditor.__proto__ || Object.getPrototypeOf(BezierEditor)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-      mode: 'source'
+      mode: "source"
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
   _createClass(BezierEditor, [{
-    key: 'getMouseCoords',
+    key: "getMouseCoords",
     value: function getMouseCoords(event) {
       var _props = this.props,
           object = _props.object,
@@ -60,7 +60,7 @@ var BezierEditor = function (_Component) {
       };
     }
   }, {
-    key: 'componentWillMount',
+    key: "componentWillMount",
     value: function componentWillMount(props) {
       var object = this.props.object;
 
@@ -72,19 +72,19 @@ var BezierEditor = function (_Component) {
         });
       } else {
         this.setState({
-          mode: 'edit'
+          mode: "edit"
         });
       }
     }
   }, {
-    key: 'getCurrentPath',
+    key: "getCurrentPath",
     value: function getCurrentPath() {
       var path = this.props.object.path;
 
       return path[path.length - 1];
     }
   }, {
-    key: 'updatePath',
+    key: "updatePath",
     value: function updatePath(updates, index) {
       var path = this.props.object.path;
 
@@ -95,7 +95,7 @@ var BezierEditor = function (_Component) {
       });
     }
   }, {
-    key: 'updateCurrentPath',
+    key: "updateCurrentPath",
     value: function updateCurrentPath(updates) {
       var close = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
       var path = this.props.object.path;
@@ -108,7 +108,7 @@ var BezierEditor = function (_Component) {
       });
     }
   }, {
-    key: 'onMouseMove',
+    key: "onMouseMove",
     value: function onMouseMove(event) {
       var mode = this.state.mode;
 
@@ -127,14 +127,14 @@ var BezierEditor = function (_Component) {
         y = moveY;
       }
 
-      if (mode === 'source') {
+      if (mode === "source") {
         this.updateCurrentPath({
           x1: mouse.x,
           y1: mouse.y
         });
       }
 
-      if (mode === 'target') {
+      if (mode === "target") {
         this.updateCurrentPath({
           x2: x,
           y2: y,
@@ -143,17 +143,17 @@ var BezierEditor = function (_Component) {
         });
       }
 
-      if (mode === 'connect') {
+      if (mode === "connect") {
         this.updateCurrentPath({ x: x, y: y });
       }
 
-      if (mode === 'target' || mode === 'connect') {
+      if (mode === "target" || mode === "connect") {
         this.setState({
           closePath: snapToInitialVertex
         });
       }
 
-      if (mode === 'move') {
+      if (mode === "move") {
         var _updatePath;
 
         var _state = this.state,
@@ -164,7 +164,7 @@ var BezierEditor = function (_Component) {
         this.updatePath((_updatePath = {}, _defineProperty(_updatePath, movedTargetX, x), _defineProperty(_updatePath, movedTargetY, y), _updatePath), movedPathIndex);
       }
 
-      if (mode === 'moveInitial') {
+      if (mode === "moveInitial") {
         this.props.onUpdate({
           moveX: x,
           moveY: y
@@ -172,7 +172,7 @@ var BezierEditor = function (_Component) {
       }
     }
   }, {
-    key: 'isCollides',
+    key: "isCollides",
     value: function isCollides(x1, y1, x2, y2) {
       var radius = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 5;
 
@@ -182,27 +182,27 @@ var BezierEditor = function (_Component) {
       return xd * xd + yd * yd <= wt * wt;
     }
   }, {
-    key: 'onMouseDown',
+    key: "onMouseDown",
     value: function onMouseDown(event) {
       if (this.state.closePath) {
         return this.closePath();
       }
 
-      if (event.target.tagName === 'svg') {
+      if (event.target.tagName === "svg") {
         return this.props.onClose();
       }
 
       var mode = this.state.mode;
 
 
-      if (mode === 'target') {
+      if (mode === "target") {
         this.setState({
-          mode: 'connect'
+          mode: "connect"
         });
       }
     }
   }, {
-    key: 'onMouseUp',
+    key: "onMouseUp",
     value: function onMouseUp(event) {
       var mode = this.state.mode;
       var path = this.props.object.path;
@@ -214,15 +214,15 @@ var BezierEditor = function (_Component) {
         return this.closePath();
       }
 
-      if (mode === 'source') {
+      if (mode === "source") {
         this.setState({
-          mode: 'target'
+          mode: "target"
         });
       }
 
-      if (mode === 'connect') {
+      if (mode === "connect") {
         this.setState({
-          mode: 'target'
+          mode: "target"
         });
         this.props.onUpdate({
           path: [].concat(_toConsumableArray(path), [{
@@ -236,14 +236,14 @@ var BezierEditor = function (_Component) {
         });
       }
 
-      if (mode === 'move' || mode === 'moveInitial') {
+      if (mode === "move" || mode === "moveInitial") {
         this.setState({
-          mode: 'edit'
+          mode: "edit"
         });
       }
     }
   }, {
-    key: 'getCurrentPoint',
+    key: "getCurrentPoint",
     value: function getCurrentPoint(pathIndex) {
       var state = this.state;
       var object = this.props.object;
@@ -256,7 +256,7 @@ var BezierEditor = function (_Component) {
       }
     }
   }, {
-    key: 'closePath',
+    key: "closePath",
     value: function closePath() {
       this.setState({
         mode: null
@@ -270,30 +270,30 @@ var BezierEditor = function (_Component) {
       }, true);
     }
   }, {
-    key: 'moveVertex',
+    key: "moveVertex",
     value: function moveVertex(pathIndex, targetX, targetY, event) {
       event.preventDefault();
 
-      if (this.state.mode !== 'edit') {
+      if (this.state.mode !== "edit") {
         return;
       }
 
       this.setState({
-        mode: 'move',
+        mode: "move",
         movedPathIndex: pathIndex,
         movedTargetX: targetX,
         movedTargetY: targetY
       });
     }
   }, {
-    key: 'moveInitialVertex',
+    key: "moveInitialVertex",
     value: function moveInitialVertex(event) {
       this.setState({
-        mode: 'moveInitial'
+        mode: "moveInitial"
       });
     }
   }, {
-    key: 'render',
+    key: "render",
     value: function render() {
       var _this2 = this;
 
@@ -311,17 +311,21 @@ var BezierEditor = function (_Component) {
           offsetY = y - moveY;
 
       return _react2.default.createElement(
-        'div',
-        { style: styles.canvas,
+        "div",
+        {
+          style: styles.canvas,
           onMouseUp: this.onMouseUp.bind(this),
           onMouseMove: this.onMouseMove.bind(this),
-          onMouseDown: this.onMouseDown.bind(this) },
+          onMouseDown: this.onMouseDown.bind(this)
+        },
         _react2.default.createElement(
-          'svg',
+          "svg",
           { style: { width: width, height: height } },
           _react2.default.createElement(
-            'g',
-            { transform: 'translate(' + offsetX + ' ' + offsetY + ')\n                         rotate(' + object.rotate + ' ' + object.x + ' ' + object.y + ')' },
+            "g",
+            {
+              transform: "translate(" + offsetX + " " + offsetY + ")\n                         rotate(" + object.rotate + " " + object.x + " " + object.y + ")"
+            },
             object.path.map(function (_ref2, i) {
               var x1 = _ref2.x1,
                   y1 = _ref2.y1,
@@ -330,33 +334,59 @@ var BezierEditor = function (_Component) {
                   x = _ref2.x,
                   y = _ref2.y;
               return _react2.default.createElement(
-                'g',
+                "g",
                 { key: i },
                 x2 && y2 && _react2.default.createElement(
-                  'g',
+                  "g",
                   null,
-                  _react2.default.createElement('line', { x1: x2, y1: y2,
-                    x2: x, y2: y,
+                  _react2.default.createElement("line", {
+                    x1: x2,
+                    y1: y2,
+                    x2: x,
+                    y2: y,
                     style: styles.edge,
-                    onMouseDown: _this2.moveVertex.bind(_this2, i, 'x', 'y') }),
-                  _react2.default.createElement('circle', { r: 4, cx: x2, cy: y2,
+                    onMouseDown: _this2.moveVertex.bind(_this2, i, "x", "y")
+                  }),
+                  _react2.default.createElement("circle", {
+                    r: 4,
+                    cx: x2,
+                    cy: y2,
                     style: styles.vertex,
-                    onMouseDown: _this2.moveVertex.bind(_this2, i, 'x2', 'y2') }),
-                  _react2.default.createElement('circle', { r: 4, cx: x, cy: y,
+                    onMouseDown: _this2.moveVertex.bind(_this2, i, "x2", "y2")
+                  }),
+                  _react2.default.createElement("circle", {
+                    r: 4,
+                    cx: x,
+                    cy: y,
                     style: styles.vertex,
-                    onMouseDown: _this2.moveVertex.bind(_this2, i, 'x', 'y') })
+                    onMouseDown: _this2.moveVertex.bind(_this2, i, "x", "y")
+                  })
                 ),
                 i === 0 && _react2.default.createElement(
-                  'g',
+                  "g",
                   null,
-                  _react2.default.createElement('line', { x1: moveX, y1: moveY,
+                  _react2.default.createElement("line", {
+                    x1: moveX,
+                    y1: moveY,
                     style: styles.edge,
-                    onMouseDown: _this2.moveVertex.bind(_this2, i, 'x1', 'y1'),
-                    x2: x1, y2: y1, stroke: 'black' }),
-                  _react2.default.createElement('circle', { style: styles.vertex, r: 4, cx: x1, cy: y1,
-                    onMouseDown: _this2.moveVertex.bind(_this2, i, 'x1', 'y1') }),
-                  _react2.default.createElement('circle', { r: 4, cx: moveX, cy: moveY,
-                    style: [styles.vertex, styles.initialVertex] })
+                    onMouseDown: _this2.moveVertex.bind(_this2, i, "x1", "y1"),
+                    x2: x1,
+                    y2: y1,
+                    stroke: "black"
+                  }),
+                  _react2.default.createElement("circle", {
+                    style: styles.vertex,
+                    r: 4,
+                    cx: x1,
+                    cy: y1,
+                    onMouseDown: _this2.moveVertex.bind(_this2, i, "x1", "y1")
+                  }),
+                  _react2.default.createElement("circle", {
+                    r: 4,
+                    cx: moveX,
+                    cy: moveY,
+                    style: [styles.vertex, styles.initialVertex]
+                  })
                 )
               );
             })

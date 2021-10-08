@@ -20,3 +20,25 @@ var modes = exports.modes = {
   TYPE: TYPE,
   EDIT_OBJECT: EDIT_OBJECT
 };
+
+var TYPES = exports.TYPES = Object.freeze({
+  MAP: "map",
+  TRACK: "track",
+  GATEWAY: "gateway"
+});
+
+var SHAPES = exports.SHAPES = Object.freeze({
+  arc: "arc",
+  circle: "circle",
+  ellipse: "ellipse",
+  polygon: "polygon",
+  polyline: "polyline",
+  rect: "rect",
+  gateway: "gateway"
+});
+
+var buildingBlock = exports.buildingBlock = Object.freeze({
+  WIFI: "wifi"
+});
+
+var clusterOptions = exports.clusterOptions = ["standalone", "cluster"];
