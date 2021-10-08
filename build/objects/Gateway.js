@@ -8,6 +8,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
 var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
@@ -16,13 +18,15 @@ var _Icon = require("../Icon");
 
 var _Icon2 = _interopRequireDefault(_Icon);
 
-var _Label = require("./Label");
+var _ = require(".");
 
-var _Label2 = _interopRequireDefault(_Label);
+var _track = require("../assets/track.svg");
 
-var _Vector2 = require("./Vector");
+var _track2 = _interopRequireDefault(_track);
 
-var _Vector3 = _interopRequireDefault(_Vector2);
+var _wifi = require("../assets/wifi.svg");
+
+var _wifi2 = _interopRequireDefault(_wifi);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -32,55 +36,70 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Rect = function (_Vector) {
-  _inherits(Rect, _Vector);
+var Gateway = function (_Vector) {
+  _inherits(Gateway, _Vector);
 
-  function Rect() {
-    _classCallCheck(this, Rect);
+  function Gateway() {
+    _classCallCheck(this, Gateway);
 
-    return _possibleConstructorReturn(this, (Rect.__proto__ || Object.getPrototypeOf(Rect)).apply(this, arguments));
+    return _possibleConstructorReturn(this, (Gateway.__proto__ || Object.getPrototypeOf(Gateway)).apply(this, arguments));
   }
 
-  _createClass(Rect, [{
+  _createClass(Gateway, [{
+    key: "getStyle",
+    value: function getStyle() {
+      return _extends({}, _get(Gateway.prototype.__proto__ || Object.getPrototypeOf(Gateway.prototype), "getStyle", this).call(this));
+    }
+  }, {
+    key: "getTransformMatrix",
+    value: function getTransformMatrix(_ref) {
+      var rotate = _ref.rotate,
+          x = _ref.x,
+          y = _ref.y;
+
+      return "rotate(" + rotate + " " + x + " " + y + ")";
+    }
+  }, {
     key: "render",
     value: function render() {
-      var object = this.props.object;
+      var _getObjectAttributes = this.getObjectAttributes(),
+          plot = _getObjectAttributes.plot;
+
       return _react2.default.createElement(
         _react2.default.Fragment,
         null,
-        _react2.default.createElement("rect", _extends({
+        _react2.default.createElement("image", _extends({
+          width: "18",
+          height: "18",
+          href: _wifi2.default,
           style: this.getStyle()
-        }, this.getObjectAttributes(), {
-          rx: object.radius,
-          width: object.width,
-          height: object.height,
-          strokeDasharray: object.type == "map" ? 0 : 4
-        })),
-        _react2.default.createElement(_Label2.default, {
-          x: object.labelCoordinates.x,
-          y: object.labelCoordinates.y,
-          label: object.name || ""
-        })
+        }, this.getObjectAttributes())),
+        _react2.default.createElement("image", { width: "18", height: "18", href: _track2.default, x: plot.x, y: plot.y })
       );
     }
   }]);
 
-  return Rect;
-}(_Vector3.default);
+  return Gateway;
+}(_.Vector);
 
-Rect.meta = {
-  icon: _react2.default.createElement(_Icon2.default, { icon: "rect", size: 30 }),
+Gateway.meta = {
+  icon: _react2.default.createElement(_Icon2.default, { icon: "wifi", size: 30 }),
   initial: {
-    width: 5,
-    height: 5,
-    fill: "#000",
-    fillOpacity: 0.3,
-    strokeWidth: 1,
-    stroke: "rgba(0,0,0,1)",
-    radius: 0,
-    blendMode: "normal",
+    width: 18,
+    height: 18,
     rotate: 0,
-    labelCoordinates: { x: 30, y: 30 }
+    x: 0,
+    y: 0,
+    z: 0,
+    name: "",
+    macId: "",
+    gatewayClusterType: "",
+    clusterId: "",
+    plot: {
+      x: 0,
+      y: 0,
+      z: 0
+    }
   }
 };
-exports.default = Rect;
+exports.default = Gateway;

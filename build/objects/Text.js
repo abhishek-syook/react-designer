@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -10,15 +10,15 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _react = require('react');
+var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
 
-var _Icon = require('../Icon');
+var _Icon = require("../Icon");
 
 var _Icon2 = _interopRequireDefault(_Icon);
 
-var _Vector2 = require('./Vector');
+var _Vector2 = require("./Vector");
 
 var _Vector3 = _interopRequireDefault(_Vector2);
 
@@ -40,10 +40,10 @@ var Text = function (_Vector) {
   }
 
   _createClass(Text, [{
-    key: 'getStyle',
+    key: "getStyle",
     value: function getStyle() {
       var object = this.props.object;
-      return _extends({}, _get(Text.prototype.__proto__ || Object.getPrototypeOf(Text.prototype), 'getStyle', this).call(this), {
+      return _extends({}, _get(Text.prototype.__proto__ || Object.getPrototypeOf(Text.prototype), "getStyle", this).call(this), {
         dominantBaseline: "central",
         fontWeight: object.fontWeight,
         fontStyle: object.fontStyle,
@@ -53,25 +53,27 @@ var Text = function (_Vector) {
       });
     }
   }, {
-    key: 'getTransformMatrix',
+    key: "getTransformMatrix",
     value: function getTransformMatrix(_ref) {
       var rotate = _ref.rotate,
           x = _ref.x,
           y = _ref.y;
 
-      return 'rotate(' + rotate + ' ' + x + ' ' + y + ')';
+      return "rotate(" + rotate + " " + x + " " + y + ")";
     }
   }, {
-    key: 'render',
+    key: "render",
     value: function render() {
       var object = this.props.object;
       return _react2.default.createElement(
-        'text',
-        _extends({ style: this.getStyle()
+        "text",
+        _extends({
+          style: this.getStyle()
         }, this.getObjectAttributes(), {
-          textAnchor: 'middle',
+          textAnchor: "middle",
           fontSize: object.fontSize,
-          fontFamily: object.fontFamily }),
+          fontFamily: object.fontFamily
+        }),
         object.text
       );
     }
@@ -81,7 +83,7 @@ var Text = function (_Vector) {
 }(_Vector3.default);
 
 Text.meta = {
-  icon: _react2.default.createElement(_Icon2.default, { icon: 'text', size: 30 }),
+  icon: _react2.default.createElement(_Icon2.default, { icon: "text", size: 30 }),
   initial: {
     text: "Hello",
     rotate: 0,
@@ -89,6 +91,7 @@ Text.meta = {
     fontStyle: "normal",
     textDecoration: "none",
     fill: "black",
+    fillOpacity: 1,
     fontSize: 50,
     fontFamily: "Helvetica"
   }

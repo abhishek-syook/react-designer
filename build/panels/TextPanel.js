@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -8,31 +8,31 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = require('react');
+var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
 
-var _lodash = require('lodash');
+var _lodash = require("lodash");
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _Panel2 = require('./Panel');
+var _Panel2 = require("./Panel");
 
 var _Panel3 = _interopRequireDefault(_Panel2);
 
-var _styles = require('./styles');
+var _styles = require("./styles");
 
 var _styles2 = _interopRequireDefault(_styles);
 
-var _PropertyGroup = require('./PropertyGroup');
+var _PropertyGroup = require("./PropertyGroup");
 
 var _PropertyGroup2 = _interopRequireDefault(_PropertyGroup);
 
-var _SwitchState = require('./SwitchState');
+var _SwitchState = require("./SwitchState");
 
 var _SwitchState2 = _interopRequireDefault(_SwitchState);
 
-var _Column = require('./Column');
+var _Column = require("./Column");
 
 var _Column2 = _interopRequireDefault(_Column);
 
@@ -58,11 +58,11 @@ var TextPanel = function (_Panel) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = TextPanel.__proto__ || Object.getPrototypeOf(TextPanel)).call.apply(_ref, [this].concat(args))), _this), _this.fontFamilies = [['Helvetica', 'Helvetica, Arial, sans-serif'], ['Helvetica Neue', '"Helvetica Neue", Arial, sans-serif'], ['Georgia', 'Georgia, serif'], ['American Typewriter', 'AmericanTypewriter, Georgia, serif'], ['Monaco', 'Monaco, consolas, monospace']], _temp), _possibleConstructorReturn(_this, _ret);
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = TextPanel.__proto__ || Object.getPrototypeOf(TextPanel)).call.apply(_ref, [this].concat(args))), _this), _this.fontFamilies = [["Helvetica", "Helvetica, Arial, sans-serif"], ["Helvetica Neue", '"Helvetica Neue", Arial, sans-serif'], ["Georgia", "Georgia, serif"], ["American Typewriter", "AmericanTypewriter, Georgia, serif"], ["Monaco", "Monaco, consolas, monospace"]], _temp), _possibleConstructorReturn(_this, _ret);
   }
 
   _createClass(TextPanel, [{
-    key: 'render',
+    key: "render",
     value: function render() {
       var _this2 = this;
 
@@ -70,69 +70,85 @@ var TextPanel = function (_Panel) {
 
       return _react2.default.createElement(
         _PropertyGroup2.default,
-        { showIf: _lodash2.default.has(object, 'text') },
+        { showIf: _lodash2.default.has(object, "text") },
         _react2.default.createElement(
-          'div',
-          { style: _styles2.default.columns },
+          "div",
+          null,
           _react2.default.createElement(
-            _Column2.default,
-            { style: { marginRight: 15 } },
-            _lodash2.default.has(object, 'fontWeight') && _react2.default.createElement(_SwitchState2.default, { icon: 'format-bold',
-              defaultValue: 'normal',
-              nextState: 'bold',
-              value: object.fontWeight,
-              onChange: this.props.onChange.bind(this, 'fontWeight') }),
-            _lodash2.default.has(object, 'fontStyle') && _react2.default.createElement(_SwitchState2.default, { icon: 'format-italic',
-              defaultValue: 'normal',
-              nextState: 'italic',
-              value: object.fontStyle,
-              onChange: this.props.onChange.bind(this, 'fontStyle') }),
-            _lodash2.default.has(object, 'textDecoration') && _react2.default.createElement(_SwitchState2.default, { icon: 'format-underline',
-              defaultValue: 'none',
-              nextState: 'underline',
-              value: object.textDecoration,
-              onChange: this.props.onChange.bind(this, 'textDecoration') })
-          ),
-          _react2.default.createElement(
-            _Column2.default,
-            { style: { "float": "left" } },
-            _lodash2.default.has(object, 'fontSize') && _react2.default.createElement('input', { style: [_styles2.default.input, _styles2.default.integerInput, { width: 35 }],
-              value: object.fontSize,
-              onChange: function onChange(e) {
-                return _this2.props.onChange('fontSize', e.target.value);
-              } })
-          ),
-          _react2.default.createElement(
-            _Column2.default,
-            { style: { "float": "right", marginRight: 10 } },
+            "div",
+            { style: _styles2.default.columns },
             _react2.default.createElement(
-              'select',
-              { style: _styles2.default.select,
-                value: object.fontFamily,
-                onChange: function onChange(e) {
-                  return _this2.props.onChange('fontFamily', e.target.value);
-                } },
-              this.fontFamilies.map(function (_ref2) {
-                var _ref3 = _slicedToArray(_ref2, 2),
-                    name = _ref3[0],
-                    value = _ref3[1];
-
-                return _react2.default.createElement(
-                  'option',
-                  { key: value, value: value },
-                  name
-                );
+              _Column2.default,
+              { style: { marginRight: 15 } },
+              _lodash2.default.has(object, "fontWeight") && _react2.default.createElement(_SwitchState2.default, {
+                icon: "format-bold",
+                defaultValue: "normal",
+                nextState: "bold",
+                value: object.fontWeight,
+                onChange: this.props.onChange.bind(this, "fontWeight")
+              }),
+              _lodash2.default.has(object, "fontStyle") && _react2.default.createElement(_SwitchState2.default, {
+                icon: "format-italic",
+                defaultValue: "normal",
+                nextState: "italic",
+                value: object.fontStyle,
+                onChange: this.props.onChange.bind(this, "fontStyle")
+              }),
+              _lodash2.default.has(object, "textDecoration") && _react2.default.createElement(_SwitchState2.default, {
+                icon: "format-underline",
+                defaultValue: "none",
+                nextState: "underline",
+                value: object.textDecoration,
+                onChange: this.props.onChange.bind(this, "textDecoration")
               })
+            ),
+            _react2.default.createElement(
+              _Column2.default,
+              null,
+              _lodash2.default.has(object, "fontSize") && _react2.default.createElement("input", {
+                style: [_styles2.default.input, _styles2.default.integerInput, { width: 35 }],
+                value: object.fontSize,
+                onChange: function onChange(e) {
+                  return _this2.props.onChange("fontSize", e.target.value);
+                }
+              })
+            ),
+            _react2.default.createElement(
+              _Column2.default,
+              { style: { marginRight: 10 } },
+              _react2.default.createElement(
+                "select",
+                {
+                  style: _styles2.default.select,
+                  value: object.fontFamily,
+                  onChange: function onChange(e) {
+                    return _this2.props.onChange("fontFamily", e.target.value);
+                  }
+                },
+                this.fontFamilies.map(function (_ref2) {
+                  var _ref3 = _slicedToArray(_ref2, 2),
+                      name = _ref3[0],
+                      value = _ref3[1];
+
+                  return _react2.default.createElement(
+                    "option",
+                    { key: value, value: value },
+                    name
+                  );
+                })
+              )
             )
           ),
           _react2.default.createElement(
-            'div',
+            "div",
             { style: [_styles2.default.row, { paddingTop: 25, paddingRight: 10 }] },
-            _react2.default.createElement('input', { style: [_styles2.default.input, _styles2.default.textInput],
+            _react2.default.createElement("input", {
+              style: [_styles2.default.input, _styles2.default.textInput],
               onChange: function onChange(e) {
-                return _this2.props.onChange('text', e.target.value);
+                return _this2.props.onChange("text", e.target.value);
               },
-              value: object.text })
+              value: object.text
+            })
           )
         )
       );

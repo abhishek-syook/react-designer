@@ -1,18 +1,18 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _react = require('react');
+var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
 
-var _radium = require('radium');
+var _radium = require("radium");
 
 var _radium2 = _interopRequireDefault(_radium);
 
-var _styles = require('./styles');
+var _styles = require("./styles");
 
 var _styles2 = _interopRequireDefault(_styles);
 
@@ -23,22 +23,33 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 var Column = function Column(_ref) {
   var _ref$showIf = _ref.showIf,
       showIf = _ref$showIf === undefined ? true : _ref$showIf,
-      props = _objectWithoutProperties(_ref, ['showIf']);
+      _ref$readOnly = _ref.readOnly,
+      readOnly = _ref$readOnly === undefined ? false : _ref$readOnly,
+      helperStyle = _ref.helperStyle,
+      props = _objectWithoutProperties(_ref, ["showIf", "readOnly", "helperStyle"]);
 
   if (!showIf) {
-    return _react2.default.createElement('div', { style: _styles2.default.empty });
+    return _react2.default.createElement("div", { style: _styles2.default.empty });
   }
 
+  var onChange = function onChange(e) {
+    if (!readOnly) {
+      props.onChange(e.target.value);
+    }
+  };
+
   return _react2.default.createElement(
-    'div',
+    "div",
     { style: [_styles2.default.column, props.style] },
-    props.children || _react2.default.createElement('input', { style: [_styles2.default.input, _styles2.default.integerInput, props.inputStyle], value: props.value,
-      onChange: function onChange(e) {
-        return props.onChange(e.target.value);
-      } }),
+    props.children || _react2.default.createElement("input", {
+      disabled: readOnly,
+      style: [_styles2.default.input, _styles2.default.integerInput, props.inputStyle],
+      value: props.value,
+      onChange: onChange
+    }),
     props.label && _react2.default.createElement(
-      'div',
-      { className: 'helpertext', style: _styles2.default.inputHelper },
+      "div",
+      { className: "helpertext", style: [_styles2.default.inputHelper, helperStyle] },
       props.label
     )
   );

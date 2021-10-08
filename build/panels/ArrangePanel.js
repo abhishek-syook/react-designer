@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -6,33 +6,33 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = require('react');
+var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
 
-var _Icon = require('../Icon');
+var _Icon = require("../Icon");
 
 var _Icon2 = _interopRequireDefault(_Icon);
 
-var _Panel2 = require('./Panel');
+var _Panel2 = require("./Panel");
 
 var _Panel3 = _interopRequireDefault(_Panel2);
 
-var _PropertyGroup = require('./PropertyGroup');
+var _PropertyGroup = require("./PropertyGroup");
 
 var _PropertyGroup2 = _interopRequireDefault(_PropertyGroup);
 
-var _Button = require('./Button');
-
-var _Button2 = _interopRequireDefault(_Button);
-
-var _Columns = require('./Columns');
+var _Columns = require("./Columns");
 
 var _Columns2 = _interopRequireDefault(_Columns);
 
-var _Column = require('./Column');
+var _Column = require("./Column");
 
 var _Column2 = _interopRequireDefault(_Column);
+
+var _Button = require("../widgets/Button");
+
+var _Button2 = _interopRequireDefault(_Button);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -52,35 +52,35 @@ var ArrangePanel = function (_Panel) {
   }
 
   _createClass(ArrangePanel, [{
-    key: 'render',
+    key: "render",
     value: function render() {
       return _react2.default.createElement(
         _PropertyGroup2.default,
         null,
         _react2.default.createElement(
           _Columns2.default,
-          { label: 'Arrange' },
+          { label: "Arrange" },
           _react2.default.createElement(
             _Column2.default,
             null,
             _react2.default.createElement(
               _Button2.default,
-              { onClick: this.props.onArrange.bind(this, 'back') },
-              _react2.default.createElement(_Icon2.default, { icon: 'send-to-back' }),
+              { onClick: this.props.onArrange.bind(this, "back") },
+              _react2.default.createElement(_Icon2.default, { icon: "send-to-back" }),
               _react2.default.createElement(
-                'span',
+                "span",
                 null,
-                'send to back'
+                "send to back"
               )
             ),
             _react2.default.createElement(
               _Button2.default,
-              { onClick: this.props.onArrange.bind(this, 'front') },
-              _react2.default.createElement(_Icon2.default, { icon: 'bring-to-front' }),
+              { onClick: this.props.onArrange.bind(this, "front") },
+              _react2.default.createElement(_Icon2.default, { icon: "bring-to-front" }),
               _react2.default.createElement(
-                'span',
+                "span",
                 null,
-                'bring to front'
+                "bring to front"
               )
             )
           )

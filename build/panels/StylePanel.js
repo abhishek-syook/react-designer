@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -6,37 +6,43 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = require('react');
+var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
 
-var _lodash = require('lodash');
+var _lodash = require("lodash");
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _Panel2 = require('./Panel');
+var _Panel2 = require("./Panel");
 
 var _Panel3 = _interopRequireDefault(_Panel2);
 
-var _styles = require('./styles');
+var _styles = require("./styles");
 
 var _styles2 = _interopRequireDefault(_styles);
 
-var _PropertyGroup = require('./PropertyGroup');
+var _PropertyGroup = require("./PropertyGroup");
 
 var _PropertyGroup2 = _interopRequireDefault(_PropertyGroup);
 
-var _Columns = require('./Columns');
+var _Columns = require("./Columns");
 
 var _Columns2 = _interopRequireDefault(_Columns);
 
-var _Column = require('./Column');
+var _Column = require("./Column");
 
 var _Column2 = _interopRequireDefault(_Column);
 
-var _ColorInput = require('./ColorInput');
+var _ColorInput = require("./ColorInput");
 
 var _ColorInput2 = _interopRequireDefault(_ColorInput);
+
+var _constants = require("../constants");
+
+var _Select = require("../widgets/Select");
+
+var _Select2 = _interopRequireDefault(_Select);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -60,78 +66,95 @@ var StylePanel = function (_Panel) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = StylePanel.__proto__ || Object.getPrototypeOf(StylePanel)).call.apply(_ref, [this].concat(args))), _this), _this.modes = ['normal', 'multiply', 'screen', 'overlay', 'darken', 'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion', 'hue', 'saturation', 'color', 'luminosity'], _temp), _possibleConstructorReturn(_this, _ret);
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = StylePanel.__proto__ || Object.getPrototypeOf(StylePanel)).call.apply(_ref, [this].concat(args))), _this), _this.modes = ["normal", "multiply", "screen", "overlay", "darken", "lighten", "color-dodge", "color-burn", "hard-light", "soft-light", "difference", "exclusion", "hue", "saturation", "color", "luminosity"], _temp), _possibleConstructorReturn(_this, _ret);
   }
 
   _createClass(StylePanel, [{
-    key: 'render',
+    key: "render",
     value: function render() {
       var _this2 = this;
 
       var object = this.props.object;
+
+
+      if (object.elementType === _constants.TYPES.GATEWAY) {
+        return null;
+      }
 
       return _react2.default.createElement(
         _PropertyGroup2.default,
         null,
         _react2.default.createElement(
           _Columns2.default,
-          { label: 'Fill' },
+          { label: "Fill" },
           _react2.default.createElement(
             _Column2.default,
             null,
-            _react2.default.createElement(_ColorInput2.default, { value: object.fill,
-              onChange: this.props.onChange.bind(this, 'fill') })
+            _react2.default.createElement(_ColorInput2.default, {
+              value: object.fill,
+              onChange: this.props.onChange.bind(this, "fill")
+            })
+          ),
+          _react2.default.createElement(
+            _Column2.default,
+            { label: "Opacity" },
+            _react2.default.createElement("input", {
+              style: [[_styles2.default.input, _styles2.default.integerInput], { width: 30 }],
+              onChange: function onChange(e) {
+                return _this2.props.onChange("fillOpacity", e.target.value);
+              },
+              value: object.fillOpacity
+            })
           )
         ),
         _react2.default.createElement(
           _Columns2.default,
-          { label: 'Stroke' },
+          { label: "Stroke" },
           _react2.default.createElement(
             _Column2.default,
             null,
-            _react2.default.createElement(_ColorInput2.default, { value: object.stroke,
-              onChange: this.props.onChange.bind(this, 'stroke') })
+            _react2.default.createElement(_ColorInput2.default, {
+              value: object.stroke,
+              onChange: this.props.onChange.bind(this, "stroke")
+            })
           ),
           _react2.default.createElement(
             _Column2.default,
-            { label: 'width' },
-            _react2.default.createElement('input', { style: [[_styles2.default.input, _styles2.default.integerInput], { width: 30 }],
+            { label: "width" },
+            _react2.default.createElement("input", {
+              style: [[_styles2.default.input, _styles2.default.integerInput], { width: 30 }],
               onChange: function onChange(e) {
-                return _this2.props.onChange('strokeWidth', e.target.value);
+                return _this2.props.onChange("strokeWidth", e.target.value);
               },
-              value: object.strokeWidth })
+              value: object.strokeWidth
+            })
           ),
           _react2.default.createElement(
             _Column2.default,
-            { showIf: _lodash2.default.has(object, 'radius'), label: 'radius' },
-            _react2.default.createElement('input', { style: [_styles2.default.input, _styles2.default.integerInput, { width: 30 }],
+            { showIf: _lodash2.default.has(object, "radius"), label: "radius" },
+            _react2.default.createElement("input", {
+              style: [_styles2.default.input, _styles2.default.integerInput, { width: 30 }],
               onChange: function onChange(e) {
-                return _this2.props.onChange('radius', e.target.value);
+                return _this2.props.onChange("radius", e.target.value);
               },
-              value: object.radius })
+              value: object.radius
+            })
           )
         ),
         _react2.default.createElement(
           _Columns2.default,
-          { label: 'Blending' },
+          { label: "Blending" },
           _react2.default.createElement(
             _Column2.default,
             null,
-            _react2.default.createElement(
-              'select',
-              { style: _styles2.default.select,
-                value: object.blendMode,
-                onChange: function onChange(e) {
-                  return _this2.props.onChange('blendMode', e.target.value);
-                } },
-              this.modes.map(function (mode) {
-                return _react2.default.createElement(
-                  'option',
-                  { key: mode, value: mode },
-                  mode
-                );
-              })
-            )
+            _react2.default.createElement(_Select2.default, {
+              name: "Blending",
+              value: object.blendMode,
+              options: this.modes,
+              onChange: function onChange(e) {
+                return _this2.props.onChange("blendMode", e.target.value);
+              }
+            })
           )
         )
       );
